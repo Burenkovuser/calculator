@@ -9,17 +9,42 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    @IBOutlet weak var displayResultLabel: UILabel!
+    var stilTyping = false//будет вводится новое число
+    var firstOperand:Double = 0;
+    var currentInput:Double {
+        get {
+            return Double(displayResultLabel.text!)!
+        }
+        set {
+            displayResultLabel.text = "\(newValue)"
+            stilTyping = false
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func numberPressed(_ sender: UIButton) {
+        
+        let number = sender.currentTitle! //задаем кнопка  это цифры с заголовка
+        
+        if stilTyping {
+            if (displayResultLabel.text?.characters.count)! < 20 {//если символов меньше 20
+                
+                displayResultLabel.text = displayResultLabel.text! + number //выводим данные с кнопок на лайбл
+        }
+        
+        } else {
+            displayResultLabel.text = number
+            stilTyping = true
+        }
+       
     }
 
-
+    @IBAction func twoOperandsSingPressed(_ sender: UIButton) {
+        
+        firstOperand = currentInput
+        print(firstOperand)
+        stilTyping = false
+        
+    }
 }
 
