@@ -11,7 +11,11 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet weak var displayResultLabel: UILabel!
     var stilTyping = false//будет вводится новое число
-    var firstOperand:Double = 0;
+    var dotIsPlace = false//в числе нет точки
+    var firstOperand:Double = 0
+    var secondOperand: Double = 0
+    var opirationSign:String = ""
+    
     var currentInput:Double {
         get {
             return Double(displayResultLabel.text!)!
@@ -41,10 +45,73 @@ class ViewController: UIViewController {
 
     @IBAction func twoOperandsSingPressed(_ sender: UIButton) {
         
+        opirationSign = sender.currentTitle!
         firstOperand = currentInput
-        print(firstOperand)
         stilTyping = false
+        dotIsPlace = false //у следующего числа можно поставить точку
+    }
+    
+    func opirateWithTwoOperands(operation: (Double, Double) -> Double) {
+        currentInput = operation(firstOperand, secondOperand)
+        stilTyping = false // после знака равно не добавлять новые цифры
+    }
+    
+    @IBAction func equalitySiggPressed(_ sender: UIButton) {
         
+        if stilTyping {
+            secondOperand = currentInput
+        }
+        
+        dotIsPlace = false
+        
+        switch opirationSign {
+        case "+":
+            opirateWithTwoOperands{$0 + $1}
+        case "-":
+            opirateWithTwoOperands{$0 - $1}
+        case "×":
+            opirateWithTwoOperands{$0 * $1}
+        case "÷":
+            opirateWithTwoOperands{$0 / $1}
+        default:
+            break
+        }
+    }
+   
+    @IBAction func clearButtonPress(_ sender: UIButton) {
+        firstOperand = 0
+        secondOperand = 0
+        currentInput = 0
+        displayResultLabel.text = "0"
+        stilTyping = false
+        dotIsPlace = false
+        opirationSign = ""
+    }
+    
+    @IBAction func plusMinusButtonPressed(_ sender: UIButton) {
+        currentInput = -currentInput
+    }
+    
+    @IBAction func persentafeButtonPresed(_ sender: UIButton) {
+        if firstOperand == 0 {
+            currentInput = currentInput / 100
+        } else {
+            secondOperand = firstOperand * currentInput / 100
+        }
+        stilTyping = false
+    }
+    
+    @IBAction func squareRootPressed(_ sender: UIButton) {
+        currentInput = sqrt(currentInput)
+    }
+    
+    @IBAction func dotButtonPressed(_ sender: UIButton) {
+        if stilTyping && !dotIsPlace {
+            displayResultLabel.text = displayResultLabel.text! + "."
+           dotIsPlace = true
+        }else if !stilTyping && !dotIsPlace {
+            displayResultLabel.text = "0."
+        }
     }
 }
 
